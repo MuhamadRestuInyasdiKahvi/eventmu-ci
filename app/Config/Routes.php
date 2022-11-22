@@ -35,18 +35,51 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
-// $routes->addRedirect('/', 'home');
+$routes->get('/', 'BerandaController::index');
+$routes->get('/login', 'AuthController::index');
+$routes->get('/register', 'AuthController::register');
+$routes->get('/admin/dashboard', 'Home::index');
+
+// Event
 $routes->get('/event', 'EventController::index');
 $routes->get('/event/add', 'EventController::create');
-$routes->post('/event', 'EventController::store');
-$routes->get('/event/edit/(:any)', 'EventController::edit/$1');
-$routes->put('/event/(:any)', 'EventController::update/$1');
-$routes->delete('/event/(:any)', 'EventController::destroy/$1');
+$routes->post('/event/create-event', 'EventController::store');
+$routes->get('/event/edit/(:num)', 'EventController::edit/$1');
+$routes->put('/event/update/(:num)', 'EventController::update/$1');
+$routes->delete('/event/delete/(:num)', 'EventController::destroy/$1');
+
 $routes->get('/event/export', 'EventController::export');
 $routes->post('/event/import', 'EventController::import');
-
 $routes->get('/event/export-pdf', 'EventController::exportPDF');
+
+// Kategori Event
+$routes->get('/kategori-event', 'EventKategoriController::index');
+$routes->post('/kategori-event/add', 'EventKategoriController::store');
+$routes->put('/kategori-event/edit/(:num)', 'EventKategoriController::update/$1');
+$routes->delete('/kategori-event/delete/(:num)', 'EventKategoriController::destroy/$1');
+
+// Tentang
+$routes->get('/tentang-kami', 'TentangController::index');
+$routes->get('/tentang-kami/add', 'TentangController::create');
+$routes->post('/tentang-kami/create-tentang', 'TentangController::store');
+$routes->get('/tentang-kami/edit/(:num)', 'TentangController::edit/$1');
+$routes->put('/tentang-kami/update/(:num)', 'TentangController::update/$1');
+$routes->delete('/tentang-kami/delete/(:num)', 'TentangController::destroy/$1');
+
+// Cara Kerjasama
+$routes->get('/kontak', 'KontakController::index');
+$routes->get('/kontak/add', 'KontakController::create');
+$routes->post('/kontak/create-kontak', 'KontakController::store');
+$routes->get('/kontak/edit/(:num)', 'KontakController::edit/$1');
+$routes->put('/kontak/update/(:num)', 'KontakController::update/$1');
+$routes->delete('/kontak/delete/(:num)', 'KontakController::destroy/$1');
+
+// API EventMu
+$routes->resource('event-api', ['controller' => 'ApiEventController']);
+$routes->resource('tentang-api', ['controller' => 'ApiTentangController']);
+$routes->resource('kontak-kami', ['controller' => 'ApiKontakController']);
+
+
 
 /*
  * --------------------------------------------------------------------

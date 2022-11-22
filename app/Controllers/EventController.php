@@ -2,68 +2,126 @@
 
 namespace App\Controllers;
 
+use App\Controllers\BaseController;
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use Dompdf\Dompdf;
 
-
-
 class EventController extends BaseController
 {
     public function index()
     {
-        // $db      = \Config\Database::connect();
-        $builder = $this->db->table('event');
-        $query   = $builder->get()->getResult();
-        $data['event'] = $query;
+        $data = [
+            'title' => 'Data Event',
+            'daftar_event' => $this->EventModel->orderBy('id_event', 'DESC')->findAll()
+        ];
+        // print_r("<pre>");print_r($data['daftar_event']);die();
         return view('data-event/index', $data);
     }
 
     public function create()
     {
-        return view('data-event/add');
+        $data = [
+            'title' => 'Tambah Data Event',
+            'kategori' => $this->KategoriModel->findAll(),
+            'validation' => \Config\Services::validation()
+        ];
+        return view('data-event/add', $data);
     }
 
     public function store()
     {
-        $data = $this->request->getPost();
-        $this->db->table('event')->insert($data);
-        if ($this->db->affectedRows() > 0) {
-            return redirect()->to(site_url('event'))->with('success', 'Data berhasil disimpan');
+        $rules = $this->validate([
+            'judul' => 'required',
+            'slug_kategori' => 'required',
+            'penyelenggara' => 'required',
+            'deskripsi' => 'required',
+            'start_event' => 'required',
+            'img_event' => 'uploaded[img_event]|is_image[img_event]|max_size[img_event,2048]|mime_in[img_event,image/jpg,image/jpeg,image/png]|ext_in[img_event,jpg,jpeg,png]',
+        ]);
+        if (!$rules) {
+            session()->setFlashdata('failed', 'Data event gagal di tambahkan');
+            return redirect()->back()->withInput();
         }
+        $slug_event = url_title($this->request->getPost('judul'), '-', TRUE);
+
+        $img_event = $this->request->getFile('img_event');
+        $name_img = $img_event->getRandomName();
+
+        $img_event->move(WRITEPATH . '../public/template/assets/img/img-event/', $name_img);
+
+        $this->EventModel->insert([
+            'slug_event' => $slug_event,
+            'slug_kategori' => $this->request->getPost('slug_kategori'),
+            'judul' => $this->request->getPost('judul'),
+            'penyelenggara' => $this->request->getPost('penyelenggara'),
+            'deskripsi' => $this->request->getPost('deskripsi'),
+            'img_event' => $name_img,
+            'start_event' => $this->request->getPost('start_event'),
+            'end_event' => $this->request->getPost('end_event'),
+        ]);
+        return redirect()->to(site_url('event'))->with('success', 'Data berhasil disimpan');
     }
 
     public function edit($id = null)
     {
-        if ($id != null) {
-            $query = $this->db->table('event')->getWhere(['id_Event' => $id]);
-            // print_r($query);
-            if ($query->resultID->num_rows > 0) {
-                $data['event'] = $query->getRow();
-                return view('data-event/edit', $data);
-            } else {
-                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-            }
-        } else {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        }
+        $data = [
+            'title' => 'Edit Data Event',
+            'event' => $this->EventModel->find($id),
+            'kategori' => $this->KategoriModel->findAll(),
+            'validation' => \Config\Services::validation()
+        ];
+        return view('data-event/edit', $data);
     }
 
     public function update($id)
     {
-        $data = $this->request->getPost();
-        unset($data['_method']);
-        $this->db->table('event')->where(['id_event' => $id])->update($data);
-        return redirect()->to(site_url('event'))->with('success', 'Data berhasil diupdate');
+        $rules = $this->validate([
+            'judul' => 'required',
+            'slug_kategori' => 'required',
+            'penyelenggara' => 'required',
+            'deskripsi' => 'required',
+            'start_event' => 'required',
+            'img_event' => 'is_image[img_event]|max_size[img_event,2048]|mime_in[img_event,image/jpg,image/jpeg,image/png]|ext_in[img_event,jpg,jpeg,png]',
+        ]);
+        if (!$rules) {
+            session()->setFlashdata('failed', 'Data event gagal di ubah');
+            return redirect()->back()->withInput();
+        }
+        $slug_event = url_title($this->request->getPost('judul'), '-', TRUE);
+
+        $img_event = $this->request->getFile('img_event');
+        if ($img_event->getError() == 4) {
+            $name_img = $this->request->getPost('gambarLama');
+        } else {
+            $name_img = $img_event->getRandomName();
+            $img_event->move(WRITEPATH . '../public/template/assets/img/img-event/', $name_img);
+
+            unlink(WRITEPATH . '../public/template/assets/img/img-event/' . $this->request->getPost('gambarLama'));
+        }
+
+
+        $this->EventModel->update($id, [
+            'slug_event' => $slug_event,
+            'slug_kategori' => $this->request->getPost('slug_kategori'),
+            'judul' => $this->request->getPost('judul'),
+            'penyelenggara' => $this->request->getPost('penyelenggara'),
+            'deskripsi' => $this->request->getPost('deskripsi'),
+            'img_event' => $name_img,
+            'start_event' => $this->request->getPost('start_event'),
+            'end_event' => $this->request->getPost('end_event'),
+        ]);
+        return redirect()->to(site_url('event'))->with('success', 'Data berhasil diubah');
     }
 
     public function destroy($id)
     {
-        // $data = $this->request->getPost();
-        // unset($data['_method']);
-        $this->db->table('event')->where(['id_event' => $id])->delete();
-        return redirect()->to(site_url('event'))->with('success', 'Data berhasil dihapus');
+        $event = $this->EventModel->find($id);
+        unlink(WRITEPATH . '../public/template/assets/img/img-event/' . $event->img_event);
+        $this->EventModel->delete($id);
+        return redirect()->back()->with('success', 'Data berhasil dihapus');
     }
 
     public function export()
@@ -129,7 +187,7 @@ class EventController extends BaseController
         $builder = $this->db->table('event');
         $query   = $builder->get()->getResult();
         $data['event'] = $query;
-        $view = view('data-event/pdf',$data);
+        $view = view('data-event/pdf', $data);
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml($view);
@@ -141,6 +199,6 @@ class EventController extends BaseController
         $dompdf->render();
 
         // Output the generated PDF to Browser
-        $dompdf->stream("data event", array("Attachment"=>false));
+        $dompdf->stream("data event", array("Attachment" => false));
     }
 }

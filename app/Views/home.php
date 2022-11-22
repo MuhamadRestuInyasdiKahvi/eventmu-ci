@@ -1,6 +1,7 @@
 <?= $this->extend('layout/default') ?>
 
 <?= $this->section('content') ?>
+
 <section class="section">
     <div class="section-header">
         <h1>Dashboard</h1>
@@ -17,7 +18,6 @@
         </div>
     </div>
 </section>
-
 <script>
     var label_polar = [];
     var data_polar = [];
@@ -47,19 +47,27 @@
     };
 
     const config = {
-        type: 'polarArea',
+        type: 'pie',
         data: data,
         options: {
             responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        begintAtZero: true
-                    }
-                }]
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Chart.js Pie Chart'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            begintAtZero: true
+                        }
+                    }]
+                }
             }
-        }
+        },
     };
 </script>
 
