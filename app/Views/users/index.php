@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -7,13 +7,16 @@
     <meta name="description" content="Eventmu Layanan Website Penyedia Event Untuk Kamu" />
     <title>Eventmu</title>
     <!-- Favicon -->
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="<?= base_url() ?>/template/assets/img/favicon.ico">
     <!-- Environtment -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Volkhov:wght@700&display=swap" rel="stylesheet" />
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
     <!-- Swiper -->
     <link rel="stylesheet" href="<?= base_url() ?>/template/assets/css/swiper-bundle.min.css">
@@ -50,7 +53,7 @@
 
 </head>
 
-<body>
+<body class="">
     <!-- Header -->
     <header class="absolute z-20 lg:z-10 w-full py-6 lg:py-12">
         <nav class="flex flex-wrap items-center justify-between lg:justify-center w-full py-4 md:py-0 px-4 text-lg text-gray-700
@@ -62,20 +65,26 @@
             <div class="hidden w-full lg:flex md:items-center lg:w-auto" id="menu">
                 <ul class="flex items-center flex-col lg:flex-row gap-y-6 lg:gap-y-0">
                     <li class="group hover:scale-110 transform transition duration-300">
-                        <a class='px-9 text-white group-hover:text-purple-1'>Beranda</a>
+                        <a href="<?= base_url() ?>" class='px-9 text-white group-hover:text-purple-1'>Beranda</a>
                     </li>
                     <li class="group hover:scale-110 transform transition duration-300">
-                        <a class='px-9 text-white group-hover:text-purple-1'>Event</a>
+                        <a href="<?= site_url('all-event') ?>" class='px-9 text-white group-hover:text-purple-1'>Event</a>
                     </li>
                     <li class="group hover:scale-110 transform transition duration-300">
-                        <a class='px-9 text-white group-hover:text-purple-1'>Tentang</a>
+                        <a href="#tentang" class='px-9 text-white group-hover:text-purple-1'>Tentang</a>
                     </li>
                     <li class="group hover:scale-110 transform transition duration-300">
-                        <a class='px-9 text-white group-hover:text-purple-1'>Kontak</a>
+                        <a href="#kontak" class='px-9 text-white group-hover:text-purple-1'>Kontak</a>
                     </li>
-                    <li class="group hover:scale-110 transform transition duration-300">
-                        <a class='px-9 text-white group-hover:text-purple-1' href="<?= site_url('login')?>">Login</a>
-                    </li>
+                    <?php if (session('id_user')) : ?>
+                        <li class="group hover:scale-110 transform transition duration-300">
+                            <a class='px-9 text-white group-hover:text-purple-1' href="<?= site_url('/logout-user') ?>">Logout</a>
+                        </li>
+                    <?php else : ?>
+                        <li class="group hover:scale-110 transform transition duration-300">
+                            <a class='px-9 text-white group-hover:text-purple-1' href="<?= site_url('login-user') ?>">Login</a>
+                        </li>
+                    <?php endif ?>
                 </ul>
             </div>
         </nav>
@@ -83,7 +92,7 @@
 
     <!-- Hero  -->
     <section class="h-[980px] flex justify-center items-center relative w-full" id="bg-hero">
-        <a class="absolute bottom-20 w-6 h-6 border-white border-b-4 border-r-4 transform rotate-45 translate-y-1/2"></a>
+        <a href="#event" class="absolute bottom-20 w-6 h-6 border-white border-b-4 border-r-4 transform rotate-45 translate-y-1/2"></a>
         <div class='max-w-7xl mx-auto'>
             <div class='w-96 h-96 lg:w-[522px] lg:h-[522px]'>
                 <img src="<?= base_url('/template/assets/img/svg/logo-hero.svg') ?>">
@@ -92,7 +101,7 @@
     </section>
 
     <!-- Event  -->
-    <section class="bg-black-primary">
+    <section class="bg-black-primary" id="event">
         <div class='max-w-7xl mx-auto py-20'>
             <div class='flex flex-col lg:flex-row gap-y-5 justify-center items-center mb-10'>
                 <span class='w-11/12  lg:w-4/12  h-1 bg-gradient-to-l from-purple-1 to-purple-2 rounded-md'></span>
@@ -101,60 +110,29 @@
             </div>
             <div class="swiper mySwiperEvent">
                 <div class="swiper-wrapper py-10 ">
-                    <div class="swiper-slide flex justify-around">
-                        <div class="max-w-xs bg-white rounded-3xl group hover:scale-110 transform transition duration-500 overflow-hidden ">
-                            <img src="<?= base_url('/template/assets/img/event-1.png') ?>" class="rounded-t-2xl object-cover object-top h-[320px] w-[320px]">
-                            <div class="p-5 group-hover:bg-gradient-to-tr from-purple-1 to-purple-2 ">
-                                <div class='flex justify-between items-center mb-5'>
-                                    <h2 class='font-sans text-xl text-gray-700 font-bold group-hover:text-white'>adfa</h2>
-                                    <span class='w-5 h-4 group-hover:w-6 '>
-                                        <svg viewBox="0 0 21 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-purple-400 group-hover:fill-white">
-                                            <path d="M1 7C0.447715 7 0 7.44772 0 8C0 8.55228 0.447715 9 1 9L1 7ZM20.7071 8.70711C21.0976 8.31658 21.0976 7.68342 20.7071 7.29289L14.3431 0.928932C13.9526 0.538408 13.3195 0.538408 12.9289 0.928932C12.5384 1.31946 12.5384 1.95262 12.9289 2.34315L18.5858 8L12.9289 13.6569C12.5384 14.0474 12.5384 14.6805 12.9289 15.0711C13.3195 15.4616 13.9526 15.4616 14.3431 15.0711L20.7071 8.70711ZM1 9L20 9V7L1 7L1 9Z" />
-                                        </svg>
-                                    </span>
+                    <?php foreach ($event as $key => $value) : ?>
+                        <div class="swiper-slide flex justify-around">
+                            <div class="max-w-xs bg-white rounded-3xl group hover:scale-110 transform transition duration-500 overflow-hidden ">
+                                <img src="<?= base_url('template/assets/img/img-event/' . $value->img_event) ?>" class="rounded-t-2xl object-cover object-top h-[320px] w-[320px]">
+                                <div class="p-5 group-hover:bg-gradient-to-tr from-purple-1 to-purple-2 ">
+                                    <div class='flex justify-between items-center mb-5'>
+                                        <h2 class='font-sans text-xl text-gray-700 font-bold group-hover:text-white'><?= $value->judul ?></h2>
+                                        <a href="<?= site_url('all-event/' . $value->id_event) ?>" class='w-5 h-4 group-hover:w-6 '>
+                                            <svg viewBox="0 0 21 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-purple-400 group-hover:fill-white">
+                                                <path d="M1 7C0.447715 7 0 7.44772 0 8C0 8.55228 0.447715 9 1 9L1 7ZM20.7071 8.70711C21.0976 8.31658 21.0976 7.68342 20.7071 7.29289L14.3431 0.928932C13.9526 0.538408 13.3195 0.538408 12.9289 0.928932C12.5384 1.31946 12.5384 1.95262 12.9289 2.34315L18.5858 8L12.9289 13.6569C12.5384 14.0474 12.5384 14.6805 12.9289 15.0711C13.3195 15.4616 13.9526 15.4616 14.3431 15.0711L20.7071 8.70711ZM1 9L20 9V7L1 7L1 9Z" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <p class='font-sans text-base text-gray-700 group-hover:text-white '>
+                                        Penyelenggara : <?= $value->penyelenggara ?>
+                                    </p>
+                                    <p class='font-sans text-base text-gray-700 group-hover:text-white '>
+                                        Tanggal : <?= date('d/m/y', strtotime($value->start_event)) ?>
+                                    </p>
                                 </div>
-                                <p class='font-sans text-base text-gray-700 group-hover:text-white '>
-                                    1
-                                </p>
                             </div>
                         </div>
-                    </div>
-                    <div class="swiper-slide flex justify-around ">
-                        <div class="max-w-xs bg-white rounded-3xl group hover:scale-110 transform transition duration-500 overflow-hidden ">
-                            <img src="<?= base_url('/template/assets/img/event-2.png') ?>" class="rounded-t-2xl object-cover object-top h-[320px] w-[320px]">
-                            <div class="p-5 group-hover:bg-gradient-to-tr from-purple-1 to-purple-2 ">
-                                <div class='flex justify-between items-center mb-5'>
-                                    <h2 class='font-sans text-xl text-gray-700 font-bold group-hover:text-white'>adfa</h2>
-                                    <span class='w-5 h-4 group-hover:w-6 '>
-                                        <svg viewBox="0 0 21 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-purple-400 group-hover:fill-white">
-                                            <path d="M1 7C0.447715 7 0 7.44772 0 8C0 8.55228 0.447715 9 1 9L1 7ZM20.7071 8.70711C21.0976 8.31658 21.0976 7.68342 20.7071 7.29289L14.3431 0.928932C13.9526 0.538408 13.3195 0.538408 12.9289 0.928932C12.5384 1.31946 12.5384 1.95262 12.9289 2.34315L18.5858 8L12.9289 13.6569C12.5384 14.0474 12.5384 14.6805 12.9289 15.0711C13.3195 15.4616 13.9526 15.4616 14.3431 15.0711L20.7071 8.70711ZM1 9L20 9V7L1 7L1 9Z" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <p class='font-sans text-base text-gray-700 group-hover:text-white '>
-                                    2
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide flex justify-around">
-                        <div class="max-w-xs bg-white rounded-3xl group hover:scale-110 transform transition duration-500 overflow-hidden ">
-                            <img src="<?= base_url('/template/assets/img/event-3.png') ?>" class="rounded-t-2xl object-cover object-top h-[320px] w-[320px]">
-                            <div class="p-5 group-hover:bg-gradient-to-tr from-purple-1 to-purple-2 ">
-                                <div class='flex justify-between items-center mb-5'>
-                                    <h2 class='font-sans text-xl text-gray-700 font-bold group-hover:text-white'>adfa</h2>
-                                    <span class='w-5 h-4 group-hover:w-6 '>
-                                        <svg viewBox="0 0 21 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-purple-400 group-hover:fill-white">
-                                            <path d="M1 7C0.447715 7 0 7.44772 0 8C0 8.55228 0.447715 9 1 9L1 7ZM20.7071 8.70711C21.0976 8.31658 21.0976 7.68342 20.7071 7.29289L14.3431 0.928932C13.9526 0.538408 13.3195 0.538408 12.9289 0.928932C12.5384 1.31946 12.5384 1.95262 12.9289 2.34315L18.5858 8L12.9289 13.6569C12.5384 14.0474 12.5384 14.6805 12.9289 15.0711C13.3195 15.4616 13.9526 15.4616 14.3431 15.0711L20.7071 8.70711ZM1 9L20 9V7L1 7L1 9Z" />
-                                        </svg>
-                                    </span>
-                                </div>
-                                <p class='font-sans text-base text-gray-700 group-hover:text-white '>
-                                    3
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endforeach ?>
                 </div>
                 <div class="swiper-button-next text-white"></div>
                 <div class="swiper-button-prev text-white"></div>
@@ -166,29 +144,25 @@
     <!-- Tentang -->
     <section class='bg-gradient-to-b from-black-primary to-purple-3 scroll-mt-20' id='tentang'>
         <div class='max-w-7xl mx-auto lg:flex '>
-            <div class='w-full lg:w-8/12'>
-                <div class='flex flex-col lg:flex-row items-center mb-2 gap-y-5 lg:gap-y-0'>
-                    <span class='w-11/12 lg:w-3/12 h-1 bg-gradient-to-r from-purple-1 to-purple-2 rounded-md lg:mr-6'></span>
-                    <h3 class='font-semibold text-lg lg:text-3xl text-white font-sans'>Tentang Kami</h3>
-                </div>
-                <div class='px-5 lg:px-0'>
-                    <h3 class='font-sans font-bold text-2xl lg:text-4xl text-white mb-5'>
-                        Eventmu dulu,<br />
-                        bersenang-senang kemudian</h3>
-                    <div class='w-full lg:w-5/6'>
-                        <p class='text-gray-200 text-base lg:text-2xl font-sans '>
-                            Eventmu merupakan website yang memudahkan kamu untuk mencari tempat hiburan
-                            terbaik mulai dari konser musik, museum seni, dan event-event lainnya.
-                            Dengan Eventmu kamu bisa mengetahui event-event apa saja yang akan dilakukan di sekitar kamu.
-                            Eventmu memberikan informasi lengkap tentang event-event yang ingin kamu tuju.
-                            Eventmu adalah solusi untuk healing kamu.
-                        </p>
+            <?php foreach ($tentang_website as $key => $value) : ?>
+                <div class='w-full lg:w-8/12'>
+                    <div class='flex flex-col lg:flex-row items-center mb-2 gap-y-5 lg:gap-y-0'>
+                        <span class='w-11/12 lg:w-3/12 h-1 bg-gradient-to-r from-purple-1 to-purple-2 rounded-md lg:mr-6'></span>
+                        <h3 class='font-semibold text-lg lg:text-3xl text-white font-sans'>Tentang Kami</h3>
+                    </div>
+                    <div class='px-5 lg:px-0'>
+                        <h3 class='font-sans font-bold text-2xl lg:text-4xl text-white mb-5'>
+                            <?= $value->slogan ?>
+                        </h3>
+                        <div class='w-full lg:w-5/6 text-gray-200 text-base lg:text-2xl font-sans '>
+                            <?= $value->deskripsi ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class='hidden lg:w-4/12 lg:block px-5'>
-                <img src="<?= base_url('/template/assets/img/manajemen-konten/about.png') ?>" class="object-contain">
-            </div>
+                <div class='hidden lg:w-4/12 lg:block px-5'>
+                    <img src="<?= base_url('template/assets/img/manajemen-konten/' . $value->img_samping) ?>" class="object-contain">
+                </div>
+            <?php endforeach ?>
         </div>
     </section>
 
@@ -222,34 +196,17 @@
                 </div>
             </div>
             <div class='flex flex-col lg:flex-row gap-10 px-5 lg:px-0'>
-                <div class='w-full lg:w-4/12 bg-gradient-to-tr from-purple-1 to-purple-2 rounded-3xl px-14 hover:scale-110 transform transition duration-500'>
-                    <img src="<?= base_url('/template/assets/img/svg/phone.svg') ?>" class='mx-auto mt-9 mb-5'>
-                    <h3 class='font-sans font-semibold text-gray-200 text-center mb-5 text-xl'>
-                        Hubungi
-                    </h3>
-                    <p class='text-center font-sans text-gray-200 lg:px-14 text-sm mb-12'>
-                        Untuk dapat melakukan promosi pada website eventmu, hubungi :
-                        0813-6352-3549 <br />(Admin)
-                    </p>
-                </div>
-                <div class='w-full lg:w-4/12 bg-gradient-to-tr from-purple-1 to-purple-2 rounded-3xl px-14 hover:scale-110 transform transition duration-500'>
-                    <img src="<?= base_url('/template/assets/img/svg/money-bag.svg') ?>" class='mx-auto mt-9 mb-5'>
-                    <h3 class='font-sans font-semibold text-gray-200 text-center mb-5 text-xl'>
-                        Bayar
-                    </h3>
-                    <p class='text-center font-sans text-gray-200 lg:px-14 text-sm mb-12'>
-                        Untuk pembayaran promosi event dapat melalui e-wallet Ovo, Gopay, Shopeepay, Dana
-                    </p>
-                </div>
-                <div class='w-full lg:w-4/12 bg-gradient-to-tr from-purple-1 to-purple-2 rounded-3xl px-14 hover:scale-110 transform transition duration-500'>
-                    <img src="<?= base_url('/template/assets/img/svg/upload.svg') ?>" class='mx-auto mt-9 mb-5'>
-                    <h3 class='font-sans font-semibold text-gray-200 text-center mb-5 text-xl'>
-                        Unggah
-                    </h3>
-                    <p class='text-center font-sans text-gray-200 lg:px-14 text-sm mb-12'>
-                        Event akan di upload pada website setelah costumer melakukan pembayaran dan konfirmasi
-                    </p>
-                </div>
+                <?php foreach ($kontak as $key => $value) : ?>
+                    <div class='w-full lg:w-4/12 bg-gradient-to-tr from-purple-1 to-purple-2 rounded-3xl px-14 hover:scale-110 transform transition duration-500'>
+                        <img src="<?= base_url('template/assets/img/manajemen-konten/' . $value->icon_cara_kerjasama) ?>" class='mx-auto mt-9 mb-5'>
+                        <h3 class='font-sans font-semibold text-gray-200 text-center mb-5 text-xl'>
+                            <?= $value->title ?>
+                        </h3>
+                        <div class='text-center font-sans text-gray-200 lg:px-14 text-sm mb-12'>
+                            <?= $value->keterangan ?>
+                        </div>
+                    </div>
+                <?php endforeach ?>
             </div>
         </div>
     </section>
@@ -258,7 +215,7 @@
     <section class='h-[500px] bg-gradient-to-b from-purple-3 to-purple-2 '>
         <div class='max-w-7xl mx-auto relative'>
             <div class='flex flex-col lg:flex-row items-center mb-2 gap-y-5 lg:gap-y-0'>
-                <span class='w-11/12 lg:w-3/12 h-1 bg-gradient-to-r from-purple-1 to-purple-2 rounded-md lg:mr-6'></span>
+                <span class='w-11/12 lg:w-2/12 h-1 bg-gradient-to-r from-purple-1 to-purple-2 rounded-md lg:mr-6'></span>
                 <h3 class='font-semibold text-lg lg:text-3xl text-white font-sans'>Testimoni</h3>
             </div>
             <h3 class='font-sans font-bold text-2xl lg:text-4xl text-white mb-2 px-5 lg:px-0'>
@@ -269,36 +226,23 @@
                 <div class="w-full lg:w-10/12 flex items-center justify-center relative h-[320px] lg:h-auto">
                     <div class="swiper mySwiperTestimoni ">
                         <div class="swiper-wrapper ">
-                            <div class="swiper-slide ">
-                                <div class='relative px-16 lg:px-32 pt-10 lg:pt-20 pb-48'>
-                                    <div class='relative'>
-                                        <div class='bg-gradient-to-r from-purple-1 to-purple-2 shadow-2xl rounded-xl p-6 relative z-20'>
-                                            <span class='w-16 h-16 absolute top-0 left-0 overflow-hidden transform -translate-x-1/2 -translate-y-1/2 rounded-full flex-none mr-3'>
-                                                <img src="<?= base_url('/template/assets/img/event-1.png') ?>" class="object-cover">
-                                                <!-- <Image src={`/images/${item.img}`} width="100%" height="100%" alt='Testimoni' layout='responsive' class='object-cover' /> -->
-                                            </span>
-                                            <p class='text-white mb-8 font-sans'>“Ga ragu lagi berkunjung ke website eventmu soalnya bermanfaat banget .”</p>
-                                            <h6 class='text-white text-lg font-sans'>Gandi Juhendra</h6>
-                                            <h6 class='text-white text-sm font-sans'>Padang, Indonesia</h6>
+                            <?php foreach ($komen as $key => $value) : ?>
+                                <div class="swiper-slide ">
+                                    <div class='relative px-16 lg:px-32 pt-10 lg:pt-20 pb-48'>
+                                        <div class='relative'>
+                                            <div class='bg-gradient-to-r from-purple-1 to-purple-2 shadow-2xl rounded-xl p-6 relative z-20'>
+                                                <span class='w-16 h-16 absolute top-0 left-0 overflow-hidden transform -translate-x-1/2 -translate-y-1/2 rounded-full flex-none mr-3'>
+                                                    <img src="<?= base_url('/template/assets/img/users/' . $value->foto_profil) ?>" class="object-cover">
+                                                    <!-- <Image src={`/images/${item.img}`} width="100%" height="100%" alt='Testimoni' layout='responsive' class='object-cover' /> -->
+                                                </span>
+                                                <p class='text-white mb-8 font-sans'>“<?= $value->pesan ?>”</p>
+                                                <h6 class='text-white text-lg font-sans'><?= $value->username ?></h6>
+                                                <h6 class='text-white text-sm font-sans'><?= $value->alamat ?></h6>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="swiper-slide ">
-                                <div class='relative px-16 lg:px-32 pt-10 lg:pt-20 pb-48'>
-                                    <div class='relative'>
-                                        <div class='bg-gradient-to-r from-purple-1 to-purple-2 shadow-2xl rounded-xl p-6 relative z-20'>
-                                            <span class='w-16 h-16 absolute top-0 left-0 overflow-hidden transform -translate-x-1/2 -translate-y-1/2 rounded-full flex-none mr-3'>
-                                                <img src="<?= base_url('/template/assets/img/event-2.png') ?>" class="object-cover">
-                                                <!-- <Image src={`/images/${item.img}`} width="100%" height="100%" alt='Testimoni' layout='responsive' class='object-cover' /> -->
-                                            </span>
-                                            <p class='text-white mb-8 font-sans'>“Ga ragu lagi berkunjung ke website eventmu soalnya bermanfaat banget untuk cari referensi liburan keluarga.”</p>
-                                            <h6 class='text-white text-lg font-sans'>Gandi Juhendra</h6>
-                                            <h6 class='text-white text-sm font-sans'>Padang, Indonesia</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php endforeach ?>
                         </div>
                     </div>
                 </div>
@@ -314,6 +258,7 @@
 
     <!-- Komentar -->
     <section class='bg-purple-2 pb-40 pt-12'>
+        <div class="swal" data-swal="<?= session('success') ?>"></div>
         <div class='max-w-7xl mx-auto relative'>
             <div class='flex flex-col lg:flex-row items-center mb-2 gap-y-5 lg:gap-y-0'>
                 <span class='w-11/12 lg:w-3/12 h-1 bg-gradient-to-r from-purple-1 to-purple-2 rounded-md lg:mr-6'></span>
@@ -322,12 +267,19 @@
             <h3 class='font-sans font-bold text-2xl lg:text-4xl text-white mb-7 px-5 lg:px-0'>
                 Tinggalkan Komentar Disini
             </h3>
-            <textarea id="message" rows="5" class="mx-auto px-5 block p-2.5 w-11/12 lg:w-full text-sm text-gray-600 bg-gray-50 rounded-lg border max-h-40 mb-11" placeholder="Tinggalkan Komentar..."></textarea>
-            <div class='flex justify-end px-5 lg:px-0'>
-                <button class="bg-purple-4 h-12 lg:h-14 rounded-2xl">
-                    <span class='px-7 lg:px-14 text-white font-sans font-semibold text-sm'>Kirim Komentar</span>
-                </button>
-            </div>
+            <form method="POST" action="<?= site_url('/komen') ?>">
+                <?= csrf_field() ?>
+                <input type="hidden" value="<?= session()->get('username'); ?>" name="username">
+                <input type="hidden" value="<?= session()->get('alamat'); ?>" name="alamat">
+                <input type="hidden" value="<?= session()->get('foto_profil'); ?>" name="foto_profil">
+                <textarea name="pesan" id="message" rows="5" class="mx-auto px-5 block p-2.5 w-11/12 lg:w-full text-sm text-gray-600 bg-gray-50 rounded-lg border max-h-40 mb-11" placeholder="Tinggalkan Komentar..." required></textarea>
+                <div class='flex justify-end px-5 lg:px-0'>
+                    <button class="bg-purple-4 h-12 lg:h-14 rounded-2xl">
+                        <span class='px-7 lg:px-14 text-white font-sans font-semibold text-sm'>Kirim Komentar</span>
+                    </button>
+                </div>
+            </form>
+
         </div>
     </section>
 
@@ -404,6 +356,24 @@
 
 
 </body>
+<!-- SweetAlert -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const swal = $('.swal').data('swal')
+    $(".swal").css('background-color', '#000');
+    if (swal) {
+        Swal.fire({
+            // position: 'top-end',
+            icon: 'success',
+            title: 'Terima Kasih!',
+            text: swal,
+            showConfirmButton: false,
+            timer: 1500
+        })
+    }
+</script>
+
 <!-- Swiper.js  -->
 <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 

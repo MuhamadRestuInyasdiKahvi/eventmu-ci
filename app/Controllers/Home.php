@@ -8,7 +8,7 @@ class Home extends BaseController
     {
         // SELECT *, COUNT(id_event) AS events FROM event GROUP BY(penyelenggara) ORDER BY penyelenggara ASC";
         // return view('home');
-        $result = $this->db->table('event')
+        $result = $this->db->table('events')
             ->select("COUNT(id_event) datas, penyelenggara")
             ->groupBy('penyelenggara')
             ->orderBy('penyelenggara', 'ASC')

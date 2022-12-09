@@ -13,6 +13,7 @@ use App\Models\KategoriModel;
 use App\Models\EventModel;
 use App\Models\TentangWebsiteModel;
 use App\Models\CaraKerjasamaModel;
+use App\Models\TestimoniModel;
 
 /**
  * Class BaseController
@@ -58,5 +59,6 @@ abstract class BaseController extends Controller
         $this->EventModel = new EventModel();
         $this->TentangWebsiteModel = new TentangWebsiteModel();
         $this->CaraKerjasamaModel = new CaraKerjasamaModel();
+        $this->TestimoniModel = new TestimoniModel();
     }
 }

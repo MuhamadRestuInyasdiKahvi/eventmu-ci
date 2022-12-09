@@ -35,9 +35,24 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+
+
+$routes->get('/login-user', 'AuthController::index');
+$routes->post('/login-user/store', 'AuthController::loginUser');
+$routes->get('/register-user', 'AuthController::register');
+$routes->post('/register-user/store-user', 'AuthController::registerStores');
+$routes->get('/logout-user', 'AuthController::logoutUser');
+
+$routes->post('/komen', 'BerandaController::komen');
+
+$routes->get('/login-admin', 'AuthController::loginAdmin');
+$routes->post('/login-admin/store', 'AuthController::loginAdminStore');
+$routes->get('/logout-admin', 'AuthController::logoutAdmin');
+
 $routes->get('/', 'BerandaController::index');
-$routes->get('/login', 'AuthController::index');
-$routes->get('/register', 'AuthController::register');
+$routes->get('/all-event', 'BerandaController::allEvent');
+$routes->get('/all-event/(:num)', 'BerandaController::detailEvent/$1');
+
 $routes->get('/admin/dashboard', 'Home::index');
 
 // Event
@@ -73,6 +88,10 @@ $routes->post('/kontak/create-kontak', 'KontakController::store');
 $routes->get('/kontak/edit/(:num)', 'KontakController::edit/$1');
 $routes->put('/kontak/update/(:num)', 'KontakController::update/$1');
 $routes->delete('/kontak/delete/(:num)', 'KontakController::destroy/$1');
+
+// Komentar - Admim
+$routes->get('/komen-admin', 'BerandaController::komendata');
+$routes->delete('/komen-admin/delete/(:num)', 'BerandaController::destroyKomen/$1');
 
 // API EventMu
 $routes->resource('event-api', ['controller' => 'ApiEventController']);

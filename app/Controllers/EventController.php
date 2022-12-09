@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class EventController extends BaseController
 {
@@ -48,9 +49,9 @@ class EventController extends BaseController
         $slug_event = url_title($this->request->getPost('judul'), '-', TRUE);
 
         $img_event = $this->request->getFile('img_event');
-        $name_img = $img_event->getRandomName();
+        $name_img = $img_event->getName();
 
-        $img_event->move(WRITEPATH . '../public/template/assets/img/img-event/', $name_img);
+        $img_event->move('template/assets/img/img-event/', $name_img);
 
         $this->EventModel->insert([
             'slug_event' => $slug_event,
@@ -126,21 +127,25 @@ class EventController extends BaseController
 
     public function export()
     {
-        $event = $this->db->table('event');
+        $event = $this->db->table('events');
         $query   = $event->get()->getResult();
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Judul');
-        $sheet->setCellValue('C1', 'Deskripsi');
-        $sheet->setCellValue('D1', 'Penyelenggara');
+        $sheet->setCellValue('C1', 'Penyelenggara');
+        $sheet->setCellValue('D1', 'Tanggal Mulai Event');
+        $sheet->setCellValue('E1', 'Tanggal Akhir Event');
+        $sheet->setCellValue('F1', 'Deskripsi');
 
         $column = 2;
         foreach ($query as $key => $value) {
             $sheet->setCellValue('A' . $column, ($column - 1));
             $sheet->setCellValue('B' . $column, $value->judul);
-            $sheet->setCellValue('C' . $column, $value->deskripsi);
-            $sheet->setCellValue('D' . $column, $value->penyelenggara);
+            $sheet->setCellValue('C' . $column, $value->penyelenggara);
+            $sheet->setCellValue('D' . $column, $value->start_event);
+            $sheet->setCellValue('E' . $column, $value->end_event);
+            $sheet->setCellValue('F' . $column, $value->deskripsi);
             $column++;
         }
         $writer = new Xlsx($spreadsheet);
@@ -170,11 +175,16 @@ class EventController extends BaseController
                     continue;
                 }
                 $data = [
+                    'slug_event' => 'default',
+                    'slug_kategori' => 'default',
+                    'img_event' => 'default',
                     'judul' => $value[1],
-                    'deskripsi' => $value[2],
-                    'penyelenggara' => $value[3],
+                    'penyelenggara' => $value[2],
+                    'start_event' => $value[3],
+                    'end_event' => $value[4],
+                    'deskripsi' => $value[5],
                 ];
-                $this->db->table('event')->insert($data);
+                $this->db->table('events')->insert($data);
             }
             return redirect()->back()->with('success', 'Data berhasil diimport');
         } else {
@@ -184,16 +194,20 @@ class EventController extends BaseController
 
     public function exportPDF()
     {
-        $builder = $this->db->table('event');
+        $builder = $this->db->table('events');
         $query   = $builder->get()->getResult();
         $data['event'] = $query;
         $view = view('data-event/pdf', $data);
 
-        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+
+        $dompdf = new Dompdf($options);
         $dompdf->loadHtml($view);
 
         // (Optional) Setup the paper size and orientation
         $dompdf->setPaper('A4', 'potrait');
+        
 
         // Render the HTML as PDF
         $dompdf->render();

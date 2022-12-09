@@ -34,11 +34,11 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="mr-2"><?= $title ?></h4>
-                <!-- <a target="_blank" href="<?= site_url('/event/export-pdf') ?>" class="btn btn-warning btn-md mr-2">Download PDF</a>
+                <a target="_blank" href="<?= site_url('/event/export-pdf') ?>" class="btn btn-warning btn-md mr-2">Download PDF</a>
                 <a href="<?= site_url('/event/export') ?>" class="btn btn-primary btn-md mr-2">Export Excel
                     <i class="fas fa-file-download"></i>
                 </a>
-                <a href="#" class="btn btn-primary btn-md" data-toggle="modal" data-target="#exampleModal">Import Excel
+                <!-- <a href="#" class="btn btn-primary btn-md" data-toggle="modal" data-target="#exampleModal">Import Excel
                     <i class="fas fa-upload"></i>
                 </a> -->
             </div>
